@@ -1,6 +1,6 @@
 // Κρατάει μόνο τα αρχεία της εφαρμογής (σελίδα, εικονίδια) για γρήγορο άνοιγμα.
 // Τον ήχο και το "Τώρα παίζει" ΔΕΝ τα αγγίζει ποτέ — έρχονται πάντα ζωντανά.
-const CACHE = "wrapitup-v2";
+const CACHE = "wrapitup-v4";
 const FILES = ["./", "index.html", "manifest.json",
   "icons/icon-192.png", "icons/icon-512.png", "icons/apple-touch-icon.png", "icons/favicon-32.png"];
 

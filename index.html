@@ -22,18 +22,19 @@
     --white:#f4f4f4; --grey:#a8a8a8;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%}
+  html,body{min-height:100%}
   body{
     background:var(--black);
     background-image:
       radial-gradient(circle at 20% 10%, rgba(255,46,136,.18), transparent 45%),
       radial-gradient(circle at 85% 90%, rgba(255,212,0,.14), transparent 45%);
     color:var(--white); font-family:'Inter',system-ui,sans-serif;
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    display:flex; flex-direction:column; align-items:center; justify-content:flex-start; min-height:100vh; min-height:100dvh;
     padding:max(24px,env(safe-area-inset-top)) 16px max(24px,env(safe-area-inset-bottom));
     -webkit-tap-highlight-color:transparent; overflow-x:hidden;
   }
-  .wrap{width:100%;max-width:420px;display:flex;flex-direction:column;gap:22px}
+  .wrap{width:100%;max-width:420px;display:flex;flex-direction:column;gap:22px;margin:auto 0}
+  header{padding-top:8px}
 
   header{text-align:center}
   .logo{
@@ -93,6 +94,26 @@
 
   @media (max-width:380px){.card{transform:none}.art{width:76px;height:76px}}
   @media (prefers-reduced-motion:reduce){.on .dot{animation:none}.logo,.card,.history{transform:none}}
+
+  /* ===== Παραγγελίες ===== */
+  .req-open{width:100%;padding:14px;border:2px solid var(--yellow);background:transparent;color:var(--yellow);
+    border-radius:6px;font-family:'Roboto Condensed',sans-serif;font-weight:800;font-size:1.2rem;letter-spacing:1px;cursor:pointer}
+  .req-open:focus-visible,.req-btn:focus-visible,.search:focus-visible{outline:3px solid var(--white);outline-offset:2px}
+  .requests{display:none}
+  .requests.show{display:block}
+  .search{width:100%;padding:12px 14px;border-radius:6px;border:2px solid #333;background:#0d0d0d;color:var(--white);
+    font:inherit;font-size:1rem;margin-bottom:12px}
+  .search:focus{border-color:var(--yellow);outline:none}
+  .rlist{list-style:none;display:flex;flex-direction:column;gap:10px;max-height:55vh;overflow-y:auto;padding-right:4px}
+  .rlist li{display:flex;gap:10px;align-items:center}
+  .rlist img{width:40px;height:40px;border-radius:3px;object-fit:cover;background:#222;flex:none}
+  .rlist .t{flex:1;min-width:0;font-size:.9rem;overflow-wrap:anywhere}
+  .rlist .a{color:var(--grey);font-size:.8rem}
+  .req-btn{flex:none;background:var(--yellow);color:var(--black);border:none;border-radius:4px;padding:8px 10px;
+    font-family:'Roboto Condensed',sans-serif;font-weight:800;cursor:pointer;min-height:40px}
+  .req-btn:disabled{opacity:.5;cursor:default}
+  .req-msg{min-height:1.2em;margin-bottom:10px;font-size:.9rem;text-align:center}
+  .req-msg.ok{color:#6cff9a}.req-msg.err{color:var(--pink)}
 </style>
 </head>
 <body>
@@ -123,6 +144,14 @@
       <input type="range" id="vol" min="0" max="1" step="0.01" value="1" aria-label="Ένταση">
     </label>
     <div class="msg" id="msg"></div>
+  </section>
+
+  <button class="req-open" id="reqOpen">🎶 ΚΑΝΕ ΠΑΡΑΓΓΕΛΙΑ</button>
+  <section class="card requests" id="requests">
+    <h2>Παραγγελία</h2>
+    <div class="req-msg" id="reqMsg" aria-live="polite"></div>
+    <input class="search" id="reqSearch" type="search" placeholder="Ψάξε τραγούδι ή καλλιτέχνη…" aria-label="Αναζήτηση τραγουδιού">
+    <ul class="rlist" id="reqList"><li style="color:var(--grey)">Φορτώνει…</li></ul>
   </section>
 
   <section class="card history">
@@ -234,6 +263,73 @@ document.addEventListener("visibilitychange", () => { if (!document.hidden) refr
 let deferred;
 window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); deferred = e; $("install").style.display = "block"; });
 $("install").addEventListener("click", async () => { if (!deferred) return; deferred.prompt(); await deferred.userChoice; deferred = null; $("install").style.display = "none"; });
+
+// ===== Παραγγελίες =====
+const REQ_API = `${SERVER}/api/station/${STATION}/requests`;
+let reqSongs = null;
+const norm = t => String(t||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");  // χωρίς τόνους στην αναζήτηση
+
+function reqMsg(text, ok){ const m=$("reqMsg"); m.textContent=text; m.className="req-msg " + (ok?"ok":"err"); }
+
+function renderReq(){
+  const q = norm($("reqSearch").value.trim());
+  const list = (reqSongs||[]).filter(r => !q || norm(r.song?.text + " " + r.song?.artist + " " + r.song?.title).includes(q)).slice(0,50);
+  const ul = $("reqList"); ul.innerHTML = "";
+  if (!list.length){ ul.innerHTML = '<li style="color:var(--grey)">Δεν βρέθηκε τίποτα.</li>'; return; }
+  for (const r of list){
+    const li = document.createElement("li");
+    const img = document.createElement("img"); img.alt=""; img.loading="lazy"; img.src = r.song?.art || fallbackArt;
+    img.onerror = () => { img.onerror=null; img.src=fallbackArt; };
+    const t = document.createElement("div"); t.className="t";
+    t.textContent = r.song?.title || r.song?.text || "—";
+    const a = document.createElement("div"); a.className="a"; a.textContent = r.song?.artist || ""; t.appendChild(a);
+    const b = document.createElement("button"); b.className="req-btn"; b.textContent="ΖΗΤΑ ΤΟ";
+    b.addEventListener("click", () => sendReq(r, b));
+    li.append(img, t, b); ul.appendChild(li);
+  }
+}
+
+async function loadReq(){
+  try{
+    const res = await fetch(REQ_API, {cache:"no-store"});
+    if (!res.ok) throw new Error(res.status);
+    reqSongs = await res.json();
+    reqSongs.sort((x,y) => (x.song?.artist||"").localeCompare(y.song?.artist||"","el") || (x.song?.title||"").localeCompare(y.song?.title||"","el"));
+    renderReq();
+  }catch(e){
+    $("reqList").innerHTML = "";
+    reqMsg("Οι παραγγελίες δεν είναι διαθέσιμες τώρα. Ο σταθμός ίσως είναι εκτός αέρα.", false);
+  }
+}
+
+async function sendReq(r, btn){
+  btn.disabled = true; btn.textContent = "…";
+  try{
+    const url = new URL(r.request_url, SERVER).href;          // στέλνουμε ΜΟΝΟ στον δικό μας σταθμό
+    if (!url.startsWith(SERVER + "/")) throw new Error("bad url");
+    const res = await fetch(url, {method:"POST"});
+    let d = {}; try { d = await res.json(); } catch(_){}
+    if (res.ok && d.success !== false){
+      reqMsg("✅ Μπήκε! «" + (r.song?.title || r.song?.text) + "» θα παίξει σε λίγο.", true);
+      btn.textContent = "✓";
+    } else {
+      reqMsg(d.formatted_message || d.message || "Δεν έγινε η παραγγελία. Δοκίμασε σε λίγο.", false);
+      btn.disabled = false; btn.textContent = "ΖΗΤΑ ΤΟ";
+    }
+  }catch(e){
+    reqMsg("Δεν έγινε η παραγγελία. Έλεγξε τη σύνδεση και δοκίμασε ξανά.", false);
+    btn.disabled = false; btn.textContent = "ΖΗΤΑ ΤΟ";
+  }
+  $("reqMsg").scrollIntoView({behavior:"smooth", block:"center"});
+}
+
+$("reqOpen").addEventListener("click", () => {
+  const sec = $("requests"); const show = !sec.classList.contains("show");
+  sec.classList.toggle("show", show);
+  $("reqOpen").textContent = show ? "✕ ΚΛΕΙΣΙΜΟ ΠΑΡΑΓΓΕΛΙΩΝ" : "🎶 ΚΑΝΕ ΠΑΡΑΓΓΕΛΙΑ";
+  if (show){ $("reqMsg").textContent=""; if (!reqSongs) loadReq(); sec.scrollIntoView({behavior:"smooth"}); }
+});
+$("reqSearch").addEventListener("input", renderReq);
 
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");
 </script>
