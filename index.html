@@ -58,8 +58,8 @@
   .np{display:flex;gap:14px;align-items:center;margin-top:16px}
   .art{width:92px;height:92px;flex:none;border-radius:4px;object-fit:cover;background:#222;border:2px solid var(--black)}
   .meta{min-width:0}
-  .title{font-family:'Roboto Condensed','Arial Narrow',sans-serif;font-weight:800;font-size:1.65rem;letter-spacing:1px;line-height:1.05;
-    overflow-wrap:anywhere}
+  .title{font-family:'Roboto Condensed','Arial Narrow',sans-serif;font-weight:800;font-size:1.3rem;letter-spacing:.5px;line-height:1.15;
+    overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
   .artist{color:var(--grey);margin-top:4px;font-size:.95rem;overflow-wrap:anywhere}
   .listeners{color:var(--grey);font-size:.8rem;margin-top:8px}
 
@@ -105,7 +105,7 @@
   <section class="card" id="player" aria-live="polite">
     <div class="live"><span class="dot"></span><span class="live-txt" id="status">ΣΥΝΔΕΣΗ…</span></div>
     <div class="np">
-      <img class="art" id="art" src="icons/icon-192.png" alt="">
+      <img class="art" id="art" src="icons/icon-192.png" alt="" onerror="this.onerror=null;this.src='icons/icon-192.png'">
       <div class="meta">
         <div class="title" id="title">—</div>
         <div class="artist" id="artist"></div>
@@ -158,19 +158,30 @@ function setUI(isPlaying){
   if ("mediaSession" in navigator) navigator.mediaSession.playbackState = isPlaying ? "playing" : "paused";
 }
 
-async function start(){
-  $("msg").textContent = "";
+let startTimer = null;
+function start(){
+  $("msg").textContent = "Φορτώνει…";
+  setUI(true);                                   // το κουμπί γίνεται STOP αμέσως
   // νέα σύνδεση κάθε φορά, ώστε να ακούς το ΤΩΡΑ και όχι κάτι παλιό
   audio.src = STREAM + "?t=" + Date.now();
-  try { await audio.play(); setUI(true); }
-  catch(e){ setUI(false); $("msg").textContent = "Δεν ξεκίνησε ο ήχος. Ο σταθμός ίσως είναι εκτός αέρα."; }
+  audio.play().catch(() => {});                  // κάποια κινητά "παραπονιούνται" ενώ τελικά παίζουν — το αγνοούμε
+  clearTimeout(startTimer);
+  // σφάλμα μόνο αν μετά από 15" ακόμα δεν έχει ακουστεί τίποτα
+  startTimer = setTimeout(() => {
+    if (playing && (audio.paused || audio.readyState < 3)){
+      stop(); $("msg").textContent = "Δεν ξεκίνησε ο ήχος. Ο σταθμός ίσως είναι εκτός αέρα.";
+    }
+  }, 15000);
 }
 function stop(){
+  clearTimeout(startTimer);
   audio.pause(); audio.removeAttribute("src"); audio.load(); setUI(false);
+  $("msg").textContent = "";
 }
 $("play").addEventListener("click", () => playing ? stop() : start());
 $("vol").addEventListener("input", e => audio.volume = e.target.value);
-audio.addEventListener("error", () => { if (playing){ setUI(false); $("msg").textContent = "Χάθηκε η σύνδεση. Πάτα PLAY ξανά."; }});
+audio.addEventListener("playing", () => { clearTimeout(startTimer); setUI(true); $("msg").textContent = ""; });
+audio.addEventListener("error", () => { if (playing && audio.getAttribute("src")){ stop(); $("msg").textContent = "Χάθηκε η σύνδεση. Πάτα PLAY ξανά."; }});
 
 // Κουμπιά στην κλειδωμένη οθόνη / ακουστικά
 if ("mediaSession" in navigator){
@@ -208,7 +219,7 @@ async function refresh(){
 
     const h = (d.song_history || []).slice(0,5);
     $("hist").innerHTML = h.length ? h.map(x => `
-      <li><img src="${esc(x.song?.art || fallbackArt)}" alt="" loading="lazy">
+      <li><img src="${esc(x.song?.art || fallbackArt)}" alt="" loading="lazy" onerror="this.onerror=null;this.src='icons/icon-192.png'">
       <div>${esc(x.song?.title || x.song?.text)}<div class="a">${esc(x.song?.artist)}</div></div></li>`).join("")
       : '<li style="color:var(--grey)">—</li>';
   }catch(e){
