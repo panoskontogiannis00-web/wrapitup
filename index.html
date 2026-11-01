@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>(w)Rap it Up!</title>
 <meta name="description" content="Rap 24/7 — Μόνο στίχος, ρυθμός και μπάσο.">
-<meta name="theme-color" content="#0d0d0d">
+<meta name="theme-color" content="#2a2a28">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" href="icons/favicon-32.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
@@ -14,153 +14,216 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Wrap it Up">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Roboto+Condensed:wght@700;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Extra+Condensed:wght@500;700;900&family=Permanent+Marker&display=swap" rel="stylesheet">
 <style>
-  /* ===== ΡΥΘΜΙΣΕΙΣ ΧΡΩΜΑΤΩΝ ===== */
-  :root{
-    --black:#0d0d0d; --asphalt:#161616; --yellow:#ffd400; --pink:#ff2e88;
-    --white:#f4f4f4; --grey:#a8a8a8;
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  html,body{min-height:100%}
-  body{
-    background:var(--black);
-    background-image:
-      radial-gradient(circle at 20% 10%, rgba(255,46,136,.18), transparent 45%),
-      radial-gradient(circle at 85% 90%, rgba(255,212,0,.14), transparent 45%);
-    color:var(--white); font-family:'Inter',system-ui,sans-serif;
-    display:flex; flex-direction:column; align-items:center; justify-content:flex-start; min-height:100vh; min-height:100dvh;
-    padding:max(24px,env(safe-area-inset-top)) 16px max(24px,env(safe-area-inset-bottom));
-    -webkit-tap-highlight-color:transparent; overflow-x:hidden;
-  }
-  .wrap{width:100%;max-width:420px;display:flex;flex-direction:column;gap:22px;margin:auto 0}
-  header{padding-top:8px}
+/* =========================================================
+   (w)Rap it Up! — "αφίσα σε τοίχο"
+   Χρώματα: άλλαξέ τα εδώ αν θες άλλο στιλ
+   ========================================================= */
+:root{
+  --wall:      #2a2a28;   /* σοβάς */
+  --wall-dark: #1b1b1a;
+  --paper:     #ebe7dc;   /* φωτοτυπία */
+  --ink:       #141414;   /* μελάνι */
+  --spray:     #e1251b;   /* κόκκινο σπρέι */
+  --tag:       #ffd400;   /* κίτρινο tag (ίδιο με το εικονίδιο) */
+  --tape:      rgba(222, 207, 168, .82);
+  --muted:     #6b675e;
+  --grain-paper: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .13 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --font: 'Fira Sans Extra Condensed', 'Arial Narrow', sans-serif;
+  /* υφή σοβά/χαρτιού, φτιαγμένη με κώδικα (δεν κατεβάζει εικόνα) */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--wall)}
+body{
+  min-height:100vh; min-height:100dvh;
+  font-family:var(--font); color:var(--paper);
+  background:
+    radial-gradient(ellipse at 50% -10%, rgba(255,255,255,.07), transparent 60%),
+    radial-gradient(ellipse at 50% 120%, rgba(0,0,0,.55), transparent 60%),
+    var(--grain), var(--wall);
+  padding: max(20px, env(safe-area-inset-top)) 18px max(28px, env(safe-area-inset-bottom));
+  display:flex; justify-content:center;
+  -webkit-tap-highlight-color:transparent; overflow-x:hidden;
+}
+.wrap{width:100%; max-width:430px; display:flex; flex-direction:column; gap:30px; margin:auto 0}
 
-  header{text-align:center}
-  .logo{
-    font-family:'Permanent Marker','Arial Black',sans-serif; font-size:clamp(2.2rem,11vw,3rem);
-    color:var(--yellow); text-shadow:4px 4px 0 var(--pink);
-    transform:rotate(-3deg); line-height:1.1;
-  }
-  .tag{color:var(--grey);margin-top:10px;font-size:.95rem}
+/* ---------- Το tag ---------- */
+header{padding:10px 4px 0; text-align:center}
+.tag{
+  font-family:'Permanent Marker','Arial Black',sans-serif;
+  font-size:clamp(2.6rem, 13vw, 3.4rem); line-height:1;
+  color:var(--tag); transform:rotate(-4deg);
+  text-shadow: 3px 3px 0 var(--ink), 0 0 18px rgba(255,212,0,.18);
+  -webkit-text-stroke: 1px rgba(0,0,0,.35);
+}
+.tagline{margin-top:14px; color:#bdb8aa; font-size:1.05rem; font-weight:500; letter-spacing:.2px}
 
-  .card{
-    background:var(--asphalt); border:2px solid var(--yellow);
-    box-shadow:7px 7px 0 var(--pink); border-radius:6px; padding:20px;
-    transform:rotate(-.6deg);
-  }
-  .live{display:flex;align-items:center;gap:8px;font-family:'Roboto Condensed','Arial Narrow',sans-serif;font-weight:800;
-    letter-spacing:2px;font-size:1.05rem;color:var(--grey)}
-  .dot{width:10px;height:10px;border-radius:50%;background:#555}
-  .on .dot{background:#ff3b3b;box-shadow:0 0 0 0 rgba(255,59,59,.7);animation:pulse 1.6s infinite}
-  .on .live-txt{color:var(--white)}
-  @keyframes pulse{70%{box-shadow:0 0 0 10px rgba(255,59,59,0)}100%{box-shadow:0 0 0 0 rgba(255,59,59,0)}}
+/* ---------- Η αφίσα (player) ---------- */
+.poster-wrap{position:relative; transform:rotate(-1.2deg)}
+.poster-shadow{filter: drop-shadow(0 14px 18px rgba(0,0,0,.55))}
+.poster{
+  position:relative; color:var(--ink);
+  background: var(--grain-paper), var(--paper);
+  padding:26px 20px 30px;
+  /* σκισμένη κάτω άκρη */
+  clip-path: polygon(0 0,100% 0,100% 96%,96% 99%,91% 96.5%,85% 99.5%,78% 97%,71% 99%,63% 96.5%,55% 99.5%,47% 97%,39% 99.2%,31% 96.8%,23% 99.4%,15% 97%,8% 99%,0 96.5%);
+}
+.tape{position:absolute; width:96px; height:28px; background:var(--tape); top:-6px; z-index:3;
+  box-shadow:0 1px 2px rgba(0,0,0,.25)}
+.tape.l{left:-14px; transform:rotate(-32deg)}
+.tape.r{right:-14px; transform:rotate(28deg)}
 
-  .np{display:flex;gap:14px;align-items:center;margin-top:16px}
-  .art{width:92px;height:92px;flex:none;border-radius:4px;object-fit:cover;background:#222;border:2px solid var(--black)}
-  .meta{min-width:0}
-  .title{font-family:'Roboto Condensed','Arial Narrow',sans-serif;font-weight:800;font-size:1.3rem;letter-spacing:.5px;line-height:1.15;
-    overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-  .artist{color:var(--grey);margin-top:4px;font-size:.95rem;overflow-wrap:anywhere}
-  .listeners{color:var(--grey);font-size:.8rem;margin-top:8px}
+.stamp{
+  display:inline-flex; align-items:center; gap:8px;
+  border:3px solid var(--muted); color:var(--muted);
+  padding:3px 10px 2px; font-weight:900; font-size:1.05rem; letter-spacing:2px; text-transform:uppercase;
+  transform:rotate(-3deg); border-radius:3px;
+}
+.on .stamp{border-color:var(--spray); color:var(--spray)}
+.dot{width:10px; height:10px; border-radius:50%; background:currentColor}
+.on .dot{animation:blink 1.4s steps(2) infinite}
+@keyframes blink{50%{opacity:.15}}
 
-  .play{
-    display:flex;align-items:center;justify-content:center;gap:12px;
-    width:100%;margin-top:20px;padding:18px;border:none;border-radius:6px;cursor:pointer;
-    background:var(--yellow);color:var(--black);
-    font-family:'Roboto Condensed','Arial Narrow',sans-serif;font-weight:800;font-size:1.7rem;letter-spacing:2px;
-    box-shadow:5px 5px 0 var(--pink);transition:transform .08s, box-shadow .08s;
-  }
-  .play:active{transform:translate(3px,3px);box-shadow:2px 2px 0 var(--pink)}
-  .play:focus-visible{outline:3px solid var(--white);outline-offset:3px}
-  .play svg{width:26px;height:26px}
+.cover{
+  display:block; margin-top:18px !important; width:100%; max-width:min(100%, 42vh); margin-left:auto !important; margin-right:auto !important; aspect-ratio:1/1; object-fit:cover; margin:18px 0 16px;
+  filter: grayscale(1) contrast(1.45) brightness(1.05);   /* φωτοτυπία */
+  mix-blend-mode:multiply; background:#cfcabd;
+}
+.song{
+  font-weight:900; text-transform:uppercase; line-height:.92;
+  font-size:clamp(2.2rem, 11.5vw, 3.1rem); letter-spacing:-.5px;
+  overflow-wrap:anywhere; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;
+}
+.artist{margin-top:8px; font-size:1.35rem; font-weight:700; color:#3a3833; overflow-wrap:anywhere}
 
-  .vol{display:flex;align-items:center;gap:10px;margin-top:16px;color:var(--grey)}
-  .vol input{flex:1;accent-color:var(--yellow)}
+.controls{display:flex; align-items:center; gap:16px; margin-top:22px}
+.play{
+  flex:none; width:84px; height:84px; border-radius:50%; border:none; cursor:pointer;
+  background: radial-gradient(circle at 35% 30%, #ff4a3d, var(--spray) 55%, #a8140d);
+  color:var(--paper); display:grid; place-items:center;
+  box-shadow: 0 0 0 4px rgba(225,37,27,.18), 0 6px 0 #7d0f09;
+  transition: transform .08s, box-shadow .08s;
+}
+.play:active{transform:translateY(4px); box-shadow:0 0 0 4px rgba(225,37,27,.18), 0 2px 0 #7d0f09}
+.play svg{width:36px; height:36px}
+.side{flex:1; min-width:0}
+.listeners{font-size:1.05rem; font-weight:700}
+.vol{display:flex; align-items:center; gap:8px; margin-top:8px; color:var(--muted)}
+.vol input{flex:1; accent-color:var(--ink)}
+.msg{min-height:1.3em; margin-top:14px; font-weight:700; color:var(--spray); font-size:1rem}
 
-  .msg{min-height:1.2em;text-align:center;color:var(--pink);font-size:.9rem;margin-top:12px}
+/* ---------- Κουμπί παραγγελίας ---------- */
+.req-open{
+  align-self:center; background:var(--tag); color:var(--ink); border:none; cursor:pointer;
+  font-family:var(--font); font-weight:900; font-size:1.35rem; padding:12px 26px;
+  transform:rotate(1.5deg); box-shadow:4px 4px 0 var(--ink);
+}
+.req-open:active{transform:rotate(1.5deg) translate(2px,2px); box-shadow:2px 2px 0 var(--ink)}
 
-  h2{font-family:'Roboto Condensed',sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--yellow);font-size:1.3rem;margin-bottom:10px}
-  .hist{list-style:none;display:flex;flex-direction:column;gap:10px}
-  .hist li{display:flex;gap:10px;align-items:center;font-size:.9rem}
-  .hist img{width:40px;height:40px;border-radius:3px;object-fit:cover;background:#222;flex:none}
-  .hist .a{color:var(--grey);font-size:.8rem}
-  .hist div{min-width:0;overflow-wrap:anywhere}
-  .history{transform:rotate(.4deg)}
+/* ---------- Παραγγελίες (δεύτερη αφίσα, πιο απλή) ---------- */
+.requests{display:none}
+.requests.show{display:block}
+.requests .poster{padding-top:22px; clip-path:none}
+.requests .poster-wrap{transform:rotate(.8deg)}
+h2{font-weight:900; font-size:1.7rem; line-height:1; margin-bottom:12px}
+.search{
+  width:100%; padding:12px; font:inherit; font-size:1.1rem; font-weight:500;
+  background:transparent; color:var(--ink); border:none; border-bottom:3px solid var(--ink); border-radius:0;
+}
+.search::placeholder{color:var(--muted)}
+.search:focus{outline:none; border-bottom-color:var(--spray)}
+.req-msg{min-height:1.3em; margin:12px 0 4px; font-weight:700}
+.req-msg.ok{color:#1d7a3a} .req-msg.err{color:var(--spray)}
+.rlist{list-style:none; max-height:52vh; overflow-y:auto; margin-top:6px}
+.rlist li{display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px dashed rgba(20,20,20,.25)}
+.rlist img{width:44px; height:44px; object-fit:cover; filter:grayscale(1) contrast(1.3); flex:none; background:#cfcabd}
+.rlist .t{flex:1; min-width:0; font-weight:700; font-size:1.1rem; line-height:1.15; overflow-wrap:anywhere}
+.rlist .a{font-weight:500; color:var(--muted); font-size:.95rem}
+.req-btn{flex:none; background:var(--ink); color:var(--paper); border:none; cursor:pointer; min-height:40px;
+  font-family:var(--font); font-weight:700; font-size:1rem; padding:6px 12px}
+.req-btn:disabled{opacity:.55; cursor:default}
+.empty{color:var(--muted); padding:10px 0}
 
-  footer{text-align:center;color:#666;font-size:.75rem}
-  .install{display:none;margin:0 auto;background:none;border:1px dashed var(--yellow);color:var(--yellow);
-    padding:8px 14px;border-radius:4px;font:inherit;cursor:pointer}
+/* ---------- Ιστορικό (λίστα πάνω στον τοίχο) ---------- */
+.history h3{font-family:'Permanent Marker',sans-serif; font-weight:400; color:var(--paper); font-size:1.5rem; margin-bottom:8px; transform:rotate(-1.5deg)}
+.hist{list-style:none}
+.hist li{display:flex; gap:12px; align-items:center; padding:10px 0; border-bottom:1px solid rgba(235,231,220,.12)}
+.hist img{width:44px; height:44px; object-fit:cover; filter:grayscale(1) contrast(1.3); flex:none; background:#3a3a37}
+.hist .t{min-width:0; font-weight:700; font-size:1.12rem; line-height:1.15; overflow-wrap:anywhere}
+.hist .a{font-weight:500; color:#a5a092; font-size:.95rem}
 
-  @media (max-width:380px){.card{transform:none}.art{width:76px;height:76px}}
-  @media (prefers-reduced-motion:reduce){.on .dot{animation:none}.logo,.card,.history{transform:none}}
+.install{display:none; align-self:center; background:none; border:2px dashed var(--paper); color:var(--paper);
+  padding:8px 16px; font:inherit; font-weight:700; font-size:1.05rem; cursor:pointer}
+footer{text-align:center; color:#8a867b; font-size:.95rem}
 
-  /* ===== Παραγγελίες ===== */
-  .req-open{width:100%;padding:14px;border:2px solid var(--yellow);background:transparent;color:var(--yellow);
-    border-radius:6px;font-family:'Roboto Condensed',sans-serif;font-weight:800;font-size:1.2rem;letter-spacing:1px;cursor:pointer}
-  .req-open:focus-visible,.req-btn:focus-visible,.search:focus-visible{outline:3px solid var(--white);outline-offset:2px}
-  .requests{display:none}
-  .requests.show{display:block}
-  .search{width:100%;padding:12px 14px;border-radius:6px;border:2px solid #333;background:#0d0d0d;color:var(--white);
-    font:inherit;font-size:1rem;margin-bottom:12px}
-  .search:focus{border-color:var(--yellow);outline:none}
-  .rlist{list-style:none;display:flex;flex-direction:column;gap:10px;max-height:55vh;overflow-y:auto;padding-right:4px}
-  .rlist li{display:flex;gap:10px;align-items:center}
-  .rlist img{width:40px;height:40px;border-radius:3px;object-fit:cover;background:#222;flex:none}
-  .rlist .t{flex:1;min-width:0;font-size:.9rem;overflow-wrap:anywhere}
-  .rlist .a{color:var(--grey);font-size:.8rem}
-  .req-btn{flex:none;background:var(--yellow);color:var(--black);border:none;border-radius:4px;padding:8px 10px;
-    font-family:'Roboto Condensed',sans-serif;font-weight:800;cursor:pointer;min-height:40px}
-  .req-btn:disabled{opacity:.5;cursor:default}
-  .req-msg{min-height:1.2em;margin-bottom:10px;font-size:.9rem;text-align:center}
-  .req-msg.ok{color:#6cff9a}.req-msg.err{color:var(--pink)}
+button:focus-visible,.search:focus-visible{outline:3px solid var(--tag); outline-offset:3px}
+
+@media (max-width:360px){ .poster{padding:22px 16px 28px} .play{width:72px;height:72px} }
+@media (prefers-reduced-motion:reduce){ .on .dot{animation:none} }
 </style>
 </head>
 <body>
 <div class="wrap">
+
   <header>
-    <div class="logo">(w)Rap it Up!</div>
-    <p class="tag">Rap 24/7 — Μόνο στίχος, ρυθμός και μπάσο.</p>
+    <h1 class="tag">(w)Rap it Up!</h1>
+    <p class="tagline">Rap 24/7. Μόνο στίχος, ρυθμός και μπάσο.</p>
   </header>
 
-  <section class="card" id="player" aria-live="polite">
-    <div class="live"><span class="dot"></span><span class="live-txt" id="status">ΣΥΝΔΕΣΗ…</span></div>
-    <div class="np">
-      <img class="art" id="art" src="icons/icon-192.png" alt="" onerror="this.onerror=null;this.src='icons/icon-192.png'">
-      <div class="meta">
-        <div class="title" id="title">—</div>
-        <div class="artist" id="artist"></div>
-        <div class="listeners" id="listeners"></div>
+  <!-- Η αφίσα: player -->
+  <div class="poster-wrap">
+    <span class="tape l" aria-hidden="true"></span><span class="tape r" aria-hidden="true"></span>
+    <div class="poster-shadow">
+    <section class="poster" id="player" aria-live="polite">
+      <span class="stamp"><span class="dot"></span><span id="status">Σύνδεση…</span></span>
+
+      <img class="cover" id="art" src="icons/icon-512.png" alt="" onerror="this.onerror=null;this.src='icons/icon-512.png'">
+      <div class="song" id="title">—</div>
+      <div class="artist" id="artist"></div>
+
+      <div class="controls">
+        <button class="play" id="play" aria-label="Αναπαραγωγή">
+          <svg id="ico" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+        <div class="side">
+          <div class="listeners" id="listeners"></div>
+          <label class="vol">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4z"/></svg>
+            <input type="range" id="vol" min="0" max="1" step="0.01" value="1" aria-label="Ένταση">
+          </label>
+        </div>
       </div>
+      <div class="msg" id="msg"></div>
+    </section>
     </div>
+  </div>
 
-    <button class="play" id="play" aria-label="Αναπαραγωγή">
-      <svg id="ico" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-      <span id="playtxt">PLAY</span>
-    </button>
+  <button class="req-open" id="reqOpen">Ζήτα τραγούδι</button>
 
-    <label class="vol">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4z"/></svg>
-      <input type="range" id="vol" min="0" max="1" step="0.01" value="1" aria-label="Ένταση">
-    </label>
-    <div class="msg" id="msg"></div>
+  <!-- Παραγγελίες -->
+  <div class="requests" id="requests">
+    <div class="poster-wrap">
+      <span class="tape l" aria-hidden="true"></span>
+      <section class="poster poster-shadow">
+        <h2>Τι θες ν' ακούσεις;</h2>
+        <input class="search" id="reqSearch" type="search" placeholder="Τραγούδι ή καλλιτέχνης" aria-label="Αναζήτηση τραγουδιού">
+        <div class="req-msg" id="reqMsg" aria-live="polite"></div>
+        <ul class="rlist" id="reqList"><li class="empty">Φορτώνει…</li></ul>
+      </section>
+    </div>
+  </div>
+
+  <!-- Ιστορικό -->
+  <section class="history">
+    <h3>Έπαιξαν πριν</h3>
+    <ul class="hist" id="hist"><li class="empty" style="color:#a5a092">—</li></ul>
   </section>
 
-  <button class="req-open" id="reqOpen">🎶 ΚΑΝΕ ΠΑΡΑΓΓΕΛΙΑ</button>
-  <section class="card requests" id="requests">
-    <h2>Παραγγελία</h2>
-    <div class="req-msg" id="reqMsg" aria-live="polite"></div>
-    <input class="search" id="reqSearch" type="search" placeholder="Ψάξε τραγούδι ή καλλιτέχνη…" aria-label="Αναζήτηση τραγουδιού">
-    <ul class="rlist" id="reqList"><li style="color:var(--grey)">Φορτώνει…</li></ul>
-  </section>
-
-  <section class="card history">
-    <h2>Έπαιξαν πριν</h2>
-    <ul class="hist" id="hist"><li style="color:var(--grey)">—</li></ul>
-  </section>
-
-  <button class="install" id="install">⬇ Εγκατάσταση εφαρμογής</button>
-  <footer>Ακούς τον (w)Rap it Up! · ζωντανά</footer>
+  <button class="install" id="install">Εγκατάσταση εφαρμογής</button>
+  <footer>Ζωντανά από την Αθήνα</footer>
 </div>
 
 <audio id="audio" preload="none"></audio>
@@ -170,35 +233,34 @@
 const SERVER  = "https://radio.tail4c6b99.ts.net";
 const STATION = "wrapitup";
 
-const STREAM = `${SERVER}/listen/${STATION}/radio.mp3`;
-const API    = `${SERVER}/api/nowplaying/${STATION}`;
+const STREAM  = `${SERVER}/listen/${STATION}/radio.mp3`;
+const API     = `${SERVER}/api/nowplaying/${STATION}`;
+const REQ_API = `${SERVER}/api/station/${STATION}/requests`;
 const $ = id => document.getElementById(id);
 const audio = $("audio");
+const fallbackArt = "icons/icon-512.png";
 let playing = false, lastSong = "";
 
 const ICON_PLAY  = '<path d="M8 5v14l11-7z"/>';
 const ICON_PAUSE = '<path d="M6 5h4v14H6zm8 0h4v14h-4z"/>';
 
+/* ---------- Ήχος ---------- */
 function setUI(isPlaying){
   playing = isPlaying;
   $("ico").innerHTML = isPlaying ? ICON_PAUSE : ICON_PLAY;
-  $("playtxt").textContent = isPlaying ? "STOP" : "PLAY";
   $("play").setAttribute("aria-label", isPlaying ? "Διακοπή" : "Αναπαραγωγή");
   if ("mediaSession" in navigator) navigator.mediaSession.playbackState = isPlaying ? "playing" : "paused";
 }
-
 let startTimer = null;
 function start(){
   $("msg").textContent = "Φορτώνει…";
-  setUI(true);                                   // το κουμπί γίνεται STOP αμέσως
-  // νέα σύνδεση κάθε φορά, ώστε να ακούς το ΤΩΡΑ και όχι κάτι παλιό
-  audio.src = STREAM + "?t=" + Date.now();
-  audio.play().catch(() => {});                  // κάποια κινητά "παραπονιούνται" ενώ τελικά παίζουν — το αγνοούμε
+  setUI(true);
+  audio.src = STREAM + "?t=" + Date.now();          // πάντα το ΤΩΡΑ, όχι κάτι παλιό
+  audio.play().catch(() => {});                     // κάποια κινητά "παραπονιούνται" ενώ τελικά παίζουν
   clearTimeout(startTimer);
-  // σφάλμα μόνο αν μετά από 15" ακόμα δεν έχει ακουστεί τίποτα
-  startTimer = setTimeout(() => {
+  startTimer = setTimeout(() => {                   // σφάλμα μόνο αν σε 15" δεν ακούστηκε τίποτα
     if (playing && (audio.paused || audio.readyState < 3)){
-      stop(); $("msg").textContent = "Δεν ξεκίνησε ο ήχος. Ο σταθμός ίσως είναι εκτός αέρα.";
+      stop(); $("msg").textContent = "Ο ήχος δεν ξεκίνησε. Ο σταθμός ίσως είναι εκτός αέρα.";
     }
   }, 15000);
 }
@@ -210,33 +272,44 @@ function stop(){
 $("play").addEventListener("click", () => playing ? stop() : start());
 $("vol").addEventListener("input", e => audio.volume = e.target.value);
 audio.addEventListener("playing", () => { clearTimeout(startTimer); setUI(true); $("msg").textContent = ""; });
-audio.addEventListener("error", () => { if (playing && audio.getAttribute("src")){ stop(); $("msg").textContent = "Χάθηκε η σύνδεση. Πάτα PLAY ξανά."; }});
-
-// Κουμπιά στην κλειδωμένη οθόνη / ακουστικά
+audio.addEventListener("error", () => { if (playing && audio.getAttribute("src")){ stop(); $("msg").textContent = "Η σύνδεση χάθηκε. Πάτα ξανά το κόκκινο κουμπί."; }});
 if ("mediaSession" in navigator){
   navigator.mediaSession.setActionHandler("play",  start);
   navigator.mediaSession.setActionHandler("pause", stop);
   navigator.mediaSession.setActionHandler("stop",  stop);
 }
 
-const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const fallbackArt = "icons/icon-192.png";
+/* ---------- Τώρα παίζει & ιστορικό ---------- */
+function makeImg(src, cls){
+  const i = document.createElement("img"); i.alt = ""; i.loading = "lazy"; if (cls) i.className = cls;
+  i.src = src || fallbackArt; i.onerror = () => { i.onerror = null; i.src = fallbackArt; };
+  return i;
+}
+function songRow(song, extra){
+  const li = document.createElement("li");
+  const t = document.createElement("div"); t.className = "t";
+  t.textContent = song?.title || song?.text || "—";
+  if (song?.artist){ const a = document.createElement("div"); a.className = "a"; a.textContent = song.artist; t.appendChild(a); }
+  li.append(makeImg(song?.art), t);
+  if (extra) li.appendChild(extra);
+  return li;
+}
 
 async function refresh(){
   try{
     const r = await fetch(API, {cache:"no-store"});
     if (!r.ok) throw 0;
     const d = await r.json();
-    const online = d.is_online;
+    const online = !!d.is_online;
     $("player").classList.toggle("on", online);
-    $("status").textContent = online ? "ΣΤΟΝ ΑΕΡΑ" : "ΕΚΤΟΣ ΑΕΡΑ";
+    $("status").textContent = online ? "Στον αέρα" : "Εκτός αέρα";
 
     const s = d.now_playing?.song || {};
     $("title").textContent  = s.title  || s.text || "—";
     $("artist").textContent = s.artist || "";
-    $("art").src = s.art || fallbackArt;
+    if ($("art").dataset.src !== (s.art || "")){ $("art").dataset.src = s.art || ""; $("art").src = s.art || fallbackArt; }
     const n = d.listeners?.current ?? 0;
-    $("listeners").textContent = online ? `🎧 ${n} ${n===1?"ακροατής":"ακροατές"} τώρα` : "";
+    $("listeners").textContent = online ? `${n} ${n === 1 ? "ακούει" : "ακούνε"} τώρα` : "";
 
     if ("mediaSession" in navigator && s.text !== lastSong){
       lastSong = s.text;
@@ -246,91 +319,77 @@ async function refresh(){
       });
     }
 
-    const h = (d.song_history || []).slice(0,5);
-    $("hist").innerHTML = h.length ? h.map(x => `
-      <li><img src="${esc(x.song?.art || fallbackArt)}" alt="" loading="lazy" onerror="this.onerror=null;this.src='icons/icon-192.png'">
-      <div>${esc(x.song?.title || x.song?.text)}<div class="a">${esc(x.song?.artist)}</div></div></li>`).join("")
-      : '<li style="color:var(--grey)">—</li>';
+    const ul = $("hist"); ul.innerHTML = "";
+    const h = (d.song_history || []).slice(0, 5);
+    if (!h.length) ul.innerHTML = '<li class="empty" style="color:#a5a092">—</li>';
+    h.forEach(x => ul.appendChild(songRow(x.song)));
   }catch(e){
     $("player").classList.remove("on");
-    $("status").textContent = "ΕΚΤΟΣ ΑΕΡΑ";
+    $("status").textContent = "Εκτός αέρα";
   }
 }
 refresh(); setInterval(refresh, 15000);
 document.addEventListener("visibilitychange", () => { if (!document.hidden) refresh(); });
 
-// Εγκατάσταση (Android/Chrome)
-let deferred;
-window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); deferred = e; $("install").style.display = "block"; });
-$("install").addEventListener("click", async () => { if (!deferred) return; deferred.prompt(); await deferred.userChoice; deferred = null; $("install").style.display = "none"; });
-
-// ===== Παραγγελίες =====
-const REQ_API = `${SERVER}/api/station/${STATION}/requests`;
+/* ---------- Παραγγελίες ---------- */
 let reqSongs = null;
-const norm = t => String(t||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");  // χωρίς τόνους στην αναζήτηση
-
-function reqMsg(text, ok){ const m=$("reqMsg"); m.textContent=text; m.className="req-msg " + (ok?"ok":"err"); }
+const norm = t => String(t || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");   // αναζήτηση χωρίς τόνους
+function reqMsg(text, ok){ const m = $("reqMsg"); m.textContent = text; m.className = "req-msg " + (ok ? "ok" : "err"); }
 
 function renderReq(){
   const q = norm($("reqSearch").value.trim());
-  const list = (reqSongs||[]).filter(r => !q || norm(r.song?.text + " " + r.song?.artist + " " + r.song?.title).includes(q)).slice(0,50);
+  const list = (reqSongs || []).filter(r => !q || norm(`${r.song?.text} ${r.song?.artist} ${r.song?.title}`).includes(q)).slice(0, 60);
   const ul = $("reqList"); ul.innerHTML = "";
-  if (!list.length){ ul.innerHTML = '<li style="color:var(--grey)">Δεν βρέθηκε τίποτα.</li>'; return; }
+  if (!list.length){ ul.innerHTML = '<li class="empty">Δεν βρέθηκε. Δοκίμασε άλλη λέξη.</li>'; return; }
   for (const r of list){
-    const li = document.createElement("li");
-    const img = document.createElement("img"); img.alt=""; img.loading="lazy"; img.src = r.song?.art || fallbackArt;
-    img.onerror = () => { img.onerror=null; img.src=fallbackArt; };
-    const t = document.createElement("div"); t.className="t";
-    t.textContent = r.song?.title || r.song?.text || "—";
-    const a = document.createElement("div"); a.className="a"; a.textContent = r.song?.artist || ""; t.appendChild(a);
-    const b = document.createElement("button"); b.className="req-btn"; b.textContent="ΖΗΤΑ ΤΟ";
+    const b = document.createElement("button"); b.className = "req-btn"; b.textContent = "Ζήτα το";
     b.addEventListener("click", () => sendReq(r, b));
-    li.append(img, t, b); ul.appendChild(li);
+    ul.appendChild(songRow(r.song, b));
   }
 }
-
 async function loadReq(){
   try{
     const res = await fetch(REQ_API, {cache:"no-store"});
     if (!res.ok) throw new Error(res.status);
     reqSongs = await res.json();
-    reqSongs.sort((x,y) => (x.song?.artist||"").localeCompare(y.song?.artist||"","el") || (x.song?.title||"").localeCompare(y.song?.title||"","el"));
+    reqSongs.sort((x, y) => (x.song?.artist || "").localeCompare(y.song?.artist || "", "el") || (x.song?.title || "").localeCompare(y.song?.title || "", "el"));
     renderReq();
   }catch(e){
     $("reqList").innerHTML = "";
-    reqMsg("Οι παραγγελίες δεν είναι διαθέσιμες τώρα. Ο σταθμός ίσως είναι εκτός αέρα.", false);
+    reqMsg("Οι παραγγελίες δεν είναι διαθέσιμες τώρα. Δοκίμασε όταν ο σταθμός είναι στον αέρα.", false);
   }
 }
-
 async function sendReq(r, btn){
   btn.disabled = true; btn.textContent = "…";
   try{
-    const url = new URL(r.request_url, SERVER).href;          // στέλνουμε ΜΟΝΟ στον δικό μας σταθμό
-    if (!url.startsWith(SERVER + "/")) throw new Error("bad url");
+    const url = new URL(r.request_url, SERVER).href;
+    if (!url.startsWith(SERVER + "/")) throw new Error("bad url");     // στέλνουμε ΜΟΝΟ στον δικό μας σταθμό
     const res = await fetch(url, {method:"POST"});
     let d = {}; try { d = await res.json(); } catch(_){}
     if (res.ok && d.success !== false){
-      reqMsg("✅ Μπήκε! «" + (r.song?.title || r.song?.text) + "» θα παίξει σε λίγο.", true);
-      btn.textContent = "✓";
+      reqMsg(`Μπήκε στη σειρά: «${r.song?.title || r.song?.text}». Θα παίξει σε λίγο.`, true);
+      btn.textContent = "Ζητήθηκε";
     } else {
-      reqMsg(d.formatted_message || d.message || "Δεν έγινε η παραγγελία. Δοκίμασε σε λίγο.", false);
-      btn.disabled = false; btn.textContent = "ΖΗΤΑ ΤΟ";
+      reqMsg(d.formatted_message || d.message || "Η παραγγελία δεν πέρασε. Δοκίμασε σε λίγα λεπτά.", false);
+      btn.disabled = false; btn.textContent = "Ζήτα το";
     }
   }catch(e){
-    reqMsg("Δεν έγινε η παραγγελία. Έλεγξε τη σύνδεση και δοκίμασε ξανά.", false);
-    btn.disabled = false; btn.textContent = "ΖΗΤΑ ΤΟ";
+    reqMsg("Η παραγγελία δεν πέρασε. Έλεγξε τη σύνδεσή σου και δοκίμασε ξανά.", false);
+    btn.disabled = false; btn.textContent = "Ζήτα το";
   }
-  $("reqMsg").scrollIntoView({behavior:"smooth", block:"center"});
 }
-
 $("reqOpen").addEventListener("click", () => {
   const sec = $("requests"); const show = !sec.classList.contains("show");
   sec.classList.toggle("show", show);
-  $("reqOpen").textContent = show ? "✕ ΚΛΕΙΣΙΜΟ ΠΑΡΑΓΓΕΛΙΩΝ" : "🎶 ΚΑΝΕ ΠΑΡΑΓΓΕΛΙΑ";
-  if (show){ $("reqMsg").textContent=""; if (!reqSongs) loadReq(); sec.scrollIntoView({behavior:"smooth"}); }
+  $("reqOpen").textContent = show ? "Κλείσε τις παραγγελίες" : "Ζήτα τραγούδι";
+  if (show){ $("reqMsg").textContent = ""; if (!reqSongs) loadReq(); sec.scrollIntoView({behavior:"smooth", block:"start"}); }
 });
 $("reqSearch").addEventListener("input", renderReq);
 
+/* ---------- Εγκατάσταση (Android) & offline ---------- */
+let deferred;
+window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); deferred = e; $("install").style.display = "block"; });
+$("install").addEventListener("click", async () => { if (!deferred) return; deferred.prompt(); await deferred.userChoice; deferred = null; $("install").style.display = "none"; });
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");
 </script>
 </body>

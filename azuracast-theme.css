@@ -1,0 +1,133 @@
+/* =========================================================
+   (w)Rap it Up! — "αφίσα σε τοίχο" για τη σελίδα του AzuraCast
+   Ίδιο στιλ με την εφαρμογή.
+
+   ΠΟΥ ΤΟ ΒΑΖΕΙΣ:
+   Διαχείριση σταθμού → Δημόσιες Σελίδες → Επωνυμία
+   → «Προσαρμοσμένο CSS για δημόσιες σελίδες»
+   → ΣΒΗΣΕ ό,τι υπάρχει, επικόλλησε ΟΛΟ αυτό → Αποθήκευση
+
+   Αν έχεις ανεβάσει "Φόντο δημόσιας σελίδας", καλύτερα πάτα
+   "Καθαρισμός εικόνας" — ο τοίχος φτιάχνεται από εδώ.
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans+Extra+Condensed:wght@500;700;900&family=Permanent+Marker&display=swap');
+
+:root{
+  --wall:  #2a2a28;
+  --paper: #ebe7dc;
+  --ink:   #141414;
+  --spray: #e1251b;
+  --tag:   #ffd400;
+  --muted: #6b675e;
+  --font: 'Fira Sans Extra Condensed', 'Arial Narrow', sans-serif;
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --grain-paper: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .13 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------- Ο τοίχος ---------- */
+html, body{
+  background:
+    radial-gradient(ellipse at 50% -10%, rgba(255,255,255,.07), transparent 60%),
+    radial-gradient(ellipse at 50% 120%, rgba(0,0,0,.55), transparent 60%),
+    var(--grain), var(--wall) !important;
+  background-attachment: fixed !important;
+  font-family: var(--font) !important;
+}
+/* κρύβει τυχόν παλιό φόντο και τα σκοτεινά "πέπλα" από το προηγούμενο θέμα */
+body::before{ display:none !important; }
+#page-wrapper, main, .public-page{ background: transparent !important; }
+
+/* ---------- Η αφίσα (player & κάρτες) ---------- */
+.card{
+  background: var(--grain-paper), var(--paper) !important;
+  color: var(--ink) !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: 0 14px 22px rgba(0,0,0,.55) !important;
+  transform: rotate(-1deg);
+  position: relative;
+  overflow: visible !important;
+}
+/* ταινία */
+.card::before, .card::after{
+  content:""; position:absolute; top:-8px; width:90px; height:26px; z-index:3;
+  background: rgba(222,207,168,.82); box-shadow: 0 1px 2px rgba(0,0,0,.25);
+}
+.card::before{ left:-12px;  transform: rotate(-30deg); }
+.card::after { right:-12px; transform: rotate(26deg); }
+
+.card-header, .card-body, .card-footer, .card-actions{
+  background: transparent !important; color: var(--ink) !important; border: none !important;
+}
+
+/* όνομα σταθμού: το tag */
+.card-header h2, .card-header h3, .card-title, h1, h2, h3{
+  font-family: 'Permanent Marker', 'Arial Black', sans-serif !important;
+  color: var(--ink) !important; text-shadow: none !important; letter-spacing: .5px;
+}
+
+/* τίτλος τραγουδιού: μεγάλα μαύρα γράμματα */
+h4, h5, .now-playing-title{
+  font-family: var(--font) !important; font-weight: 900 !important;
+  text-transform: uppercase; line-height: .95; letter-spacing: -.3px;
+  color: var(--ink) !important;
+}
+h6, .now-playing-artist, .text-muted, .text-secondary, small{
+  font-family: var(--font) !important; font-weight: 700;
+  color: #3a3833 !important;
+}
+
+/* εξώφυλλο σαν φωτοτυπία */
+.card img{
+  border-radius: 0 !important;
+  filter: grayscale(1) contrast(1.4);
+  mix-blend-mode: multiply;
+}
+
+/* ---------- Κουμπιά ---------- */
+.btn-primary, .btn-play, button.btn-primary{
+  background: var(--spray) !important; border-color: var(--spray) !important;
+  color: var(--paper) !important; border-radius: 0 !important;
+  font-family: var(--font) !important; font-weight: 900 !important;
+}
+.btn, button{ border-radius: 0 !important; font-family: var(--font) !important; }
+/* μεγάλο κόκκινο κουμπί play, όπως στην εφαρμογή */
+.radio-control-play-button, .btn-play, [class*="play-button"]{
+  background: radial-gradient(circle at 35% 30%, #ff4a3d, var(--spray) 55%, #a8140d) !important;
+  color: var(--paper) !important; border: none !important; border-radius: 50% !important;
+  box-shadow: 0 0 0 4px rgba(225,37,27,.18), 0 4px 0 #7d0f09 !important;
+}
+
+/* σύνδεσμοι (Ιστορικό, Αίτημα τραγουδιού κ.λπ.) */
+a, .btn-link{
+  color: var(--ink) !important; font-family: var(--font) !important; font-weight: 900 !important;
+  text-decoration: none !important;
+}
+a:hover, .btn-link:hover{ color: var(--spray) !important; }
+.card-actions a, .card-actions .btn{
+  background: var(--tag) !important; color: var(--ink) !important;
+  padding: 6px 12px !important; box-shadow: 3px 3px 0 var(--ink);
+}
+
+/* ---------- Μπάρα & ένταση ---------- */
+.progress{ background: rgba(20,20,20,.15) !important; height: 6px !important; border-radius: 0 !important; }
+.progress-bar{ background: var(--spray) !important; }
+input[type="range"]{ accent-color: var(--ink); }
+
+/* ---------- Παράθυρα (Ιστορικό / Αίτημα τραγουδιού) ---------- */
+.modal-content{
+  background: var(--grain-paper), var(--paper) !important; color: var(--ink) !important;
+  border: none !important; border-radius: 0 !important;
+}
+.modal-header, .modal-footer{ border-color: rgba(20,20,20,.2) !important; }
+.table, .table td, .table th{ color: var(--ink) !important; background: transparent !important; border-color: rgba(20,20,20,.15) !important; }
+.form-control, input[type="search"]{
+  background: transparent !important; color: var(--ink) !important;
+  border: none !important; border-bottom: 3px solid var(--ink) !important; border-radius: 0 !important;
+}
+
+/* ---------- Κινητά ---------- */
+@media (max-width: 576px){
+  .card{ transform: none; }
+}
