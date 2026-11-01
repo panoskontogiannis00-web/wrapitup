@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>(w)Rap it Up!</title>
+<meta name="description" content="Rap 24/7 — Μόνο στίχος, ρυθμός και μπάσο.">
+<meta name="theme-color" content="#0d0d0d">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Wrap it Up">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Roboto+Condensed:wght@700;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  /* ===== ΡΥΘΜΙΣΕΙΣ ΧΡΩΜΑΤΩΝ ===== */
+  :root{
+    --black:#0d0d0d; --asphalt:#161616; --yellow:#ffd400; --pink:#ff2e88;
+    --white:#f4f4f4; --grey:#a8a8a8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--black);
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(255,46,136,.18), transparent 45%),
+      radial-gradient(circle at 85% 90%, rgba(255,212,0,.14), transparent 45%);
+    color:var(--white); font-family:'Inter',system-ui,sans-serif;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:max(24px,env(safe-area-inset-top)) 16px max(24px,env(safe-area-inset-bottom));
+    -webkit-tap-highlight-color:transparent; overflow-x:hidden;
+  }
+  .wrap{width:100%;max-width:420px;display:flex;flex-direction:column;gap:22px}
+
+  header{text-align:center}
+  .logo{
+    font-family:'Permanent Marker','Arial Black',sans-serif; font-size:clamp(2.2rem,11vw,3rem);
+    color:var(--yellow); text-shadow:4px 4px 0 var(--pink);
+    transform:rotate(-3deg); line-height:1.1;
+  }
+  .tag{color:var(--grey);margin-top:10px;font-size:.95rem}
+
+  .card{
+    background:var(--asphalt); border:2px solid var(--yellow);
+    box-shadow:7px 7px 0 var(--pink); border-radius:6px; padding:20px;
+    transform:rotate(-.6deg);
+  }
+  .live{display:flex;align-items:center;gap:8px;font-family:'Roboto Condensed','Arial Narrow',sans-serif;font-weight:800;
+    letter-spacing:2px;font-size:1.05rem;color:var(--grey)}
+  .dot{width:10px;height:10px;border-radius:50%;background:#555}
+  .on .dot{background:#ff3b3b;box-shadow:0 0 0 0 rgba(255,59,59,.7);animation:pulse 1.6s infinite}
+  .on .live-txt{color:var(--white)}
+  @keyframes pulse{70%{box-shadow:0 0 0 10px rgba(255,59,59,0)}100%{box-shadow:0 0 0 0 rgba(255,59,59,0)}}
+
+  .np{display:flex;gap:14px;align-items:center;margin-top:16px}
+  .art{width:92px;height:92px;flex:none;border-radius:4px;object-fit:cover;background:#222;border:2px solid var(--black)}
+  .meta{min-width:0}
+  .title{font-family:'Roboto Condensed','Arial Narrow',sans-serif;font-weight:800;font-size:1.3rem;letter-spacing:.5px;line-height:1.15;
+    overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .artist{color:var(--grey);margin-top:4px;font-size:.95rem;overflow-wrap:anywhere}
+  .listeners{color:var(--grey);font-size:.8rem;margin-top:8px}
+
+  .play{
+    display:flex;align-items:center;justify-content:center;gap:12px;
+    width:100%;margin-top:20px;padding:18px;border:none;border-radius:6px;cursor:pointer;
+    background:var(--yellow);color:var(--black);
+    font-family:'Roboto Condensed','Arial Narrow',sans-serif;font-weight:800;font-size:1.7rem;letter-spacing:2px;
+    box-shadow:5px 5px 0 var(--pink);transition:transform .08s, box-shadow .08s;
+  }
+  .play:active{transform:translate(3px,3px);box-shadow:2px 2px 0 var(--pink)}
+  .play:focus-visible{outline:3px solid var(--white);outline-offset:3px}
+  .play svg{width:26px;height:26px}
+
+  .vol{display:flex;align-items:center;gap:10px;margin-top:16px;color:var(--grey)}
+  .vol input{flex:1;accent-color:var(--yellow)}
+
+  .msg{min-height:1.2em;text-align:center;color:var(--pink);font-size:.9rem;margin-top:12px}
+
+  h2{font-family:'Roboto Condensed',sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--yellow);font-size:1.3rem;margin-bottom:10px}
+  .hist{list-style:none;display:flex;flex-direction:column;gap:10px}
+  .hist li{display:flex;gap:10px;align-items:center;font-size:.9rem}
+  .hist img{width:40px;height:40px;border-radius:3px;object-fit:cover;background:#222;flex:none}
+  .hist .a{color:var(--grey);font-size:.8rem}
+  .hist div{min-width:0;overflow-wrap:anywhere}
+  .history{transform:rotate(.4deg)}
+
+  footer{text-align:center;color:#666;font-size:.75rem}
+  .install{display:none;margin:0 auto;background:none;border:1px dashed var(--yellow);color:var(--yellow);
+    padding:8px 14px;border-radius:4px;font:inherit;cursor:pointer}
+
+  @media (max-width:380px){.card{transform:none}.art{width:76px;height:76px}}
+  @media (prefers-reduced-motion:reduce){.on .dot{animation:none}.logo,.card,.history{transform:none}}
+
+  /* ===== Παραγγελίες ===== */
+  .req-open{width:100%;padding:14px;border:2px solid var(--yellow);background:transparent;color:var(--yellow);
+    border-radius:6px;font-family:'Roboto Condensed',sans-serif;font-weight:800;font-size:1.2rem;letter-spacing:1px;cursor:pointer}
+  .req-open:focus-visible,.req-btn:focus-visible,.search:focus-visible{outline:3px solid var(--white);outline-offset:2px}
+  .requests{display:none}
+  .requests.show{display:block}
+  .search{width:100%;padding:12px 14px;border-radius:6px;border:2px solid #333;background:#0d0d0d;color:var(--white);
+    font:inherit;font-size:1rem;margin-bottom:12px}
+  .search:focus{border-color:var(--yellow);outline:none}
+  .rlist{list-style:none;display:flex;flex-direction:column;gap:10px;max-height:55vh;overflow-y:auto;padding-right:4px}
+  .rlist li{display:flex;gap:10px;align-items:center}
+  .rlist img{width:40px;height:40px;border-radius:3px;object-fit:cover;background:#222;flex:none}
+  .rlist .t{flex:1;min-width:0;font-size:.9rem;overflow-wrap:anywhere}
+  .rlist .a{color:var(--grey);font-size:.8rem}
+  .req-btn{flex:none;background:var(--yellow);color:var(--black);border:none;border-radius:4px;padding:8px 10px;
+    font-family:'Roboto Condensed',sans-serif;font-weight:800;cursor:pointer;min-height:40px}
+  .req-btn:disabled{opacity:.5;cursor:default}
+  .req-msg{min-height:1.2em;margin-bottom:10px;font-size:.9rem;text-align:center}
+  .req-msg.ok{color:#6cff9a}.req-msg.err{color:var(--pink)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">(w)Rap it Up!</div>
+    <p class="tag">Rap 24/7 — Μόνο στίχος, ρυθμός και μπάσο.</p>
+  </header>
+
+  <section class="card" id="player" aria-live="polite">
+    <div class="live"><span class="dot"></span><span class="live-txt" id="status">ΣΥΝΔΕΣΗ…</span></div>
+    <div class="np">
+      <img class="art" id="art" src="icons/icon-192.png" alt="" onerror="this.onerror=null;this.src='icons/icon-192.png'">
+      <div class="meta">
+        <div class="title" id="title">—</div>
+        <div class="artist" id="artist"></div>
+        <div class="listeners" id="listeners"></div>
+      </div>
+    </div>
+
+    <button class="play" id="play" aria-label="Αναπαραγωγή">
+      <svg id="ico" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      <span id="playtxt">PLAY</span>
+    </button>
+
+    <label class="vol">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4z"/></svg>
+      <input type="range" id="vol" min="0" max="1" step="0.01" value="1" aria-label="Ένταση">
+    </label>
+    <div class="msg" id="msg"></div>
+  </section>
+
+  <button class="req-open" id="reqOpen">🎶 ΚΑΝΕ ΠΑΡΑΓΓΕΛΙΑ</button>
+  <section class="card requests" id="requests">
+    <h2>Παραγγελία</h2>
+    <div class="req-msg" id="reqMsg" aria-live="polite"></div>
+    <input class="search" id="reqSearch" type="search" placeholder="Ψάξε τραγούδι ή καλλιτέχνη…" aria-label="Αναζήτηση τραγουδιού">
+    <ul class="rlist" id="reqList"><li style="color:var(--grey)">Φορτώνει…</li></ul>
+  </section>
+
+  <section class="card history">
+    <h2>Έπαιξαν πριν</h2>
+    <ul class="hist" id="hist"><li style="color:var(--grey)">—</li></ul>
+  </section>
+
+  <button class="install" id="install">⬇ Εγκατάσταση εφαρμογής</button>
+  <footer>Ακούς τον (w)Rap it Up! · ζωντανά</footer>
+</div>
+
+<audio id="audio" preload="none"></audio>
+
+<script>
+/* ===== ΡΥΘΜΙΣΕΙΣ ΣΤΑΘΜΟΥ — αν αλλάξει η διεύθυνση, άλλαξε ΜΟΝΟ αυτές τις 2 γραμμές ===== */
+const SERVER  = "https://radio.tail4c6b99.ts.net";
+const STATION = "wrapitup";
+
+const STREAM = `${SERVER}/listen/${STATION}/radio.mp3`;
+const API    = `${SERVER}/api/nowplaying/${STATION}`;
+const $ = id => document.getElementById(id);
+const audio = $("audio");
+let playing = false, lastSong = "";
+
+const ICON_PLAY  = '<path d="M8 5v14l11-7z"/>';
+const ICON_PAUSE = '<path d="M6 5h4v14H6zm8 0h4v14h-4z"/>';
+
+function setUI(isPlaying){
+  playing = isPlaying;
+  $("ico").innerHTML = isPlaying ? ICON_PAUSE : ICON_PLAY;
+  $("playtxt").textContent = isPlaying ? "STOP" : "PLAY";
+  $("play").setAttribute("aria-label", isPlaying ? "Διακοπή" : "Αναπαραγωγή");
+  if ("mediaSession" in navigator) navigator.mediaSession.playbackState = isPlaying ? "playing" : "paused";
+}
+
+let startTimer = null;
+function start(){
+  $("msg").textContent = "Φορτώνει…";
+  setUI(true);                                   // το κουμπί γίνεται STOP αμέσως
+  // νέα σύνδεση κάθε φορά, ώστε να ακούς το ΤΩΡΑ και όχι κάτι παλιό
+  audio.src = STREAM + "?t=" + Date.now();
+  audio.play().catch(() => {});                  // κάποια κινητά "παραπονιούνται" ενώ τελικά παίζουν — το αγνοούμε
+  clearTimeout(startTimer);
+  // σφάλμα μόνο αν μετά από 15" ακόμα δεν έχει ακουστεί τίποτα
+  startTimer = setTimeout(() => {
+    if (playing && (audio.paused || audio.readyState < 3)){
+      stop(); $("msg").textContent = "Δεν ξεκίνησε ο ήχος. Ο σταθμός ίσως είναι εκτός αέρα.";
+    }
+  }, 15000);
+}
+function stop(){
+  clearTimeout(startTimer);
+  audio.pause(); audio.removeAttribute("src"); audio.load(); setUI(false);
+  $("msg").textContent = "";
+}
+$("play").addEventListener("click", () => playing ? stop() : start());
+$("vol").addEventListener("input", e => audio.volume = e.target.value);
+audio.addEventListener("playing", () => { clearTimeout(startTimer); setUI(true); $("msg").textContent = ""; });
+audio.addEventListener("error", () => { if (playing && audio.getAttribute("src")){ stop(); $("msg").textContent = "Χάθηκε η σύνδεση. Πάτα PLAY ξανά."; }});
+
+// Κουμπιά στην κλειδωμένη οθόνη / ακουστικά
+if ("mediaSession" in navigator){
+  navigator.mediaSession.setActionHandler("play",  start);
+  navigator.mediaSession.setActionHandler("pause", stop);
+  navigator.mediaSession.setActionHandler("stop",  stop);
+}
+
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fallbackArt = "icons/icon-192.png";
+
+async function refresh(){
+  try{
+    const r = await fetch(API, {cache:"no-store"});
+    if (!r.ok) throw 0;
+    const d = await r.json();
+    const online = d.is_online;
+    $("player").classList.toggle("on", online);
+    $("status").textContent = online ? "ΣΤΟΝ ΑΕΡΑ" : "ΕΚΤΟΣ ΑΕΡΑ";
+
+    const s = d.now_playing?.song || {};
+    $("title").textContent  = s.title  || s.text || "—";
+    $("artist").textContent = s.artist || "";
+    $("art").src = s.art || fallbackArt;
+    const n = d.listeners?.current ?? 0;
+    $("listeners").textContent = online ? `🎧 ${n} ${n===1?"ακροατής":"ακροατές"} τώρα` : "";
+
+    if ("mediaSession" in navigator && s.text !== lastSong){
+      lastSong = s.text;
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: s.title || "(w)Rap it Up!", artist: s.artist || "", album: "(w)Rap it Up!",
+        artwork: [{src: s.art || new URL(fallbackArt, location.href).href, sizes:"512x512"}]
+      });
+    }
+
+    const h = (d.song_history || []).slice(0,5);
+    $("hist").innerHTML = h.length ? h.map(x => `
+      <li><img src="${esc(x.song?.art || fallbackArt)}" alt="" loading="lazy" onerror="this.onerror=null;this.src='icons/icon-192.png'">
+      <div>${esc(x.song?.title || x.song?.text)}<div class="a">${esc(x.song?.artist)}</div></div></li>`).join("")
+      : '<li style="color:var(--grey)">—</li>';
+  }catch(e){
+    $("player").classList.remove("on");
+    $("status").textContent = "ΕΚΤΟΣ ΑΕΡΑ";
+  }
+}
+refresh(); setInterval(refresh, 15000);
+document.addEventListener("visibilitychange", () => { if (!document.hidden) refresh(); });
+
+// Εγκατάσταση (Android/Chrome)
+let deferred;
+window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); deferred = e; $("install").style.display = "block"; });
+$("install").addEventListener("click", async () => { if (!deferred) return; deferred.prompt(); await deferred.userChoice; deferred = null; $("install").style.display = "none"; });
+
+// ===== Παραγγελίες =====
+const REQ_API = `${SERVER}/api/station/${STATION}/requests`;
+let reqSongs = null;
+const norm = t => String(t||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");  // χωρίς τόνους στην αναζήτηση
+
+function reqMsg(text, ok){ const m=$("reqMsg"); m.textContent=text; m.className="req-msg " + (ok?"ok":"err"); }
+
+function renderReq(){
+  const q = norm($("reqSearch").value.trim());
+  const list = (reqSongs||[]).filter(r => !q || norm(r.song?.text + " " + r.song?.artist + " " + r.song?.title).includes(q)).slice(0,50);
+  const ul = $("reqList"); ul.innerHTML = "";
+  if (!list.length){ ul.innerHTML = '<li style="color:var(--grey)">Δεν βρέθηκε τίποτα.</li>'; return; }
+  for (const r of list){
+    const li = document.createElement("li");
+    const img = document.createElement("img"); img.alt=""; img.loading="lazy"; img.src = r.song?.art || fallbackArt;
+    img.onerror = () => { img.onerror=null; img.src=fallbackArt; };
+    const t = document.createElement("div"); t.className="t";
+    t.textContent = r.song?.title || r.song?.text || "—";
+    const a = document.createElement("div"); a.className="a"; a.textContent = r.song?.artist || ""; t.appendChild(a);
+    const b = document.createElement("button"); b.className="req-btn"; b.textContent="ΖΗΤΑ ΤΟ";
+    b.addEventListener("click", () => sendReq(r, b));
+    li.append(img, t, b); ul.appendChild(li);
+  }
+}
+
+async function loadReq(){
+  try{
+    const res = await fetch(REQ_API, {cache:"no-store"});
+    if (!res.ok) throw new Error(res.status);
+    reqSongs = await res.json();
+    reqSongs.sort((x,y) => (x.song?.artist||"").localeCompare(y.song?.artist||"","el") || (x.song?.title||"").localeCompare(y.song?.title||"","el"));
+    renderReq();
+  }catch(e){
+    $("reqList").innerHTML = "";
+    reqMsg("Οι παραγγελίες δεν είναι διαθέσιμες τώρα. Ο σταθμός ίσως είναι εκτός αέρα.", false);
+  }
+}
+
+async function sendReq(r, btn){
+  btn.disabled = true; btn.textContent = "…";
+  try{
+    const url = new URL(r.request_url, SERVER).href;          // στέλνουμε ΜΟΝΟ στον δικό μας σταθμό
+    if (!url.startsWith(SERVER + "/")) throw new Error("bad url");
+    const res = await fetch(url, {method:"POST"});
+    let d = {}; try { d = await res.json(); } catch(_){}
+    if (res.ok && d.success !== false){
+      reqMsg("✅ Μπήκε! «" + (r.song?.title || r.song?.text) + "» θα παίξει σε λίγο.", true);
+      btn.textContent = "✓";
+    } else {
+      reqMsg(d.formatted_message || d.message || "Δεν έγινε η παραγγελία. Δοκίμασε σε λίγο.", false);
+      btn.disabled = false; btn.textContent = "ΖΗΤΑ ΤΟ";
+    }
+  }catch(e){
+    reqMsg("Δεν έγινε η παραγγελία. Έλεγξε τη σύνδεση και δοκίμασε ξανά.", false);
+    btn.disabled = false; btn.textContent = "ΖΗΤΑ ΤΟ";
+  }
+  $("reqMsg").scrollIntoView({behavior:"smooth", block:"center"});
+}
+
+$("reqOpen").addEventListener("click", () => {
+  const sec = $("requests"); const show = !sec.classList.contains("show");
+  sec.classList.toggle("show", show);
+  $("reqOpen").textContent = show ? "✕ ΚΛΕΙΣΙΜΟ ΠΑΡΑΓΓΕΛΙΩΝ" : "🎶 ΚΑΝΕ ΠΑΡΑΓΓΕΛΙΑ";
+  if (show){ $("reqMsg").textContent=""; if (!reqSongs) loadReq(); sec.scrollIntoView({behavior:"smooth"}); }
+});
+$("reqSearch").addEventListener("input", renderReq);
+
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");
+</script>
+</body>
+</html>
